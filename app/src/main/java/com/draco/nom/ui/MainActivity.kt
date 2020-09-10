@@ -8,13 +8,12 @@ import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Display
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.draco.nom.*
+import com.draco.nom.R
 import com.draco.nom.data.AppInfo
+import com.draco.nom.databinding.ActivityMainBinding
 import com.draco.nom.utils.adapters.RecyclerAdapter
 import com.draco.nom.utils.extensions.getDefaultDisplay
 import com.draco.nom.utils.extensions.notificationChannelId
@@ -24,16 +23,17 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerAdapter: RecyclerAdapter
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val container = findViewById<LinearLayout>(R.id.container)
-        val recycler = findViewById<RecyclerView>(R.id.recycler)
+        // Inflate via view binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        recyclerAdapter = RecyclerAdapter(getAppList(), recycler, sharedPrefs)
+        recyclerAdapter = RecyclerAdapter(getAppList(), binding.recycler, sharedPrefs)
         recyclerAdapter.setHasStableIds(true)
 
         val displayMetrics = resources.displayMetrics
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val iconSize = resources.getDimension(R.dimen.icon_size) / displayMetrics.density
         val columns = Integer.max(5, (screenWidthDp / iconSize).toInt())
 
-        with (recycler) {
+        with (binding.recycler) {
             setItemViewCacheSize(1000)
             adapter = recyclerAdapter
             layoutManager = GridLayoutManager(context, columns)
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             val backgroundColor = Color.parseColor(backgroundColorString)
             window.statusBarColor = backgroundColor
             window.navigationBarColor = backgroundColor
-            container.setBackgroundColor(backgroundColor)
+            binding.container.setBackgroundColor(backgroundColor)
         } catch (_: Exception) {}
     }
 
