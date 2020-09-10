@@ -20,6 +20,49 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
     private lateinit var recyclerAdapter: RecyclerAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val container = findViewById<LinearLayout>(R.id.container)
+        val recycler = findViewById<RecyclerView>(R.id.recycler)
+
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        recyclerAdapter = RecyclerAdapter(getAppList(), recycler, sharedPrefs)
+        recyclerAdapter.setHasStableIds(true)
+
+        val displayMetrics = resources.displayMetrics
+        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
+        val iconSize = resources.getDimension(R.dimen.icon_size) / displayMetrics.density
+        val columns = Integer.max(5, (screenWidthDp / iconSize).toInt())
+
+        with (recycler) {
+            setItemViewCacheSize(1000)
+            adapter = recyclerAdapter
+            layoutManager = GridLayoutManager(context, columns)
+        }
+
+        createNotificationChannel()
+
+        if (getDefaultDisplay(this) == Display.DEFAULT_DISPLAY &&
+            !sharedPrefs.getBoolean("rotation", false)) {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+
+        val backgroundColorString = sharedPrefs.getString("background_color", "#88000000")
+        try {
+            val backgroundColor = Color.parseColor(backgroundColorString)
+            window.statusBarColor = backgroundColor
+            window.navigationBarColor = backgroundColor
+            container.setBackgroundColor(backgroundColor)
+        } catch (_: Exception) {}
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerAdapter.updateList(getAppList())
+    }
+
     private fun getAppList(): ArrayList<AppInfo> {
         val launcherIntent = Intent(Intent.ACTION_MAIN, null)
         launcherIntent.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -64,50 +107,7 @@ class MainActivity : AppCompatActivity() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val container = findViewById<LinearLayout>(R.id.container)
-        val recycler = findViewById<RecyclerView>(R.id.recycler)
-
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
-        recyclerAdapter = RecyclerAdapter(getAppList(), recycler, sharedPrefs)
-        recyclerAdapter.setHasStableIds(true)
-
-        val displayMetrics = resources.displayMetrics
-        val screenWidthDp = displayMetrics.widthPixels / displayMetrics.density
-        val iconSize = resources.getDimension(R.dimen.icon_size) / displayMetrics.density
-        val columns = Integer.max(5, (screenWidthDp / iconSize).toInt())
-
-        with (recycler) {
-            setItemViewCacheSize(1000)
-            adapter = recyclerAdapter
-            layoutManager = GridLayoutManager(context, columns)
-        }
-
-        createNotificationChannel()
-
-        if (getDefaultDisplay(this) == Display.DEFAULT_DISPLAY &&
-            !sharedPrefs.getBoolean("rotation", false)) {
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-
-        val backgroundColorString = sharedPrefs.getString("background_color", "#88000000")
-        try {
-            val backgroundColor = Color.parseColor(backgroundColorString)
-            window.statusBarColor = backgroundColor
-            window.navigationBarColor = backgroundColor
-            container.setBackgroundColor(backgroundColor)
-        } catch (_: Exception) {}
-    }
-
     override fun onBackPressed() {}
-
-    override fun onResume() {
-        super.onResume()
-        recyclerAdapter.updateList(getAppList())
-    }
 
     override fun onDestroy() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
