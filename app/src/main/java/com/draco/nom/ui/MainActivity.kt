@@ -1,4 +1,4 @@
-package com.draco.nom
+package com.draco.nom.ui
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,6 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.draco.nom.*
+import com.draco.nom.data.AppInfo
+import com.draco.nom.utils.adapters.RecyclerAdapter
+import com.draco.nom.utils.extensions.getDefaultDisplay
+import com.draco.nom.utils.extensions.notificationChannelId
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList

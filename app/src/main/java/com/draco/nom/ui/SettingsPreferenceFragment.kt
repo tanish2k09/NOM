@@ -1,10 +1,11 @@
-package com.draco.nom
+package com.draco.nom.ui
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.draco.nom.R
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 class SettingsPreferenceFragment : PreferenceFragmentCompat() {

@@ -13,5 +13,5 @@
         android:id="@+id/recycler"
         android:fadingEdgeLength="30dp"
         android:requiresFadingEdge="vertical"
-        tools:context=".MainActivity" />
+        tools:context=".ui.MainActivity" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.draco.nom
+package com.draco.nom.data
 
 import android.graphics.drawable.Drawable
 

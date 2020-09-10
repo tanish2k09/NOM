@@ -1,4 +1,4 @@
-package com.draco.nom
+package com.draco.nom.utils.adapters
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -18,12 +18,17 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.draco.nom.R
+import com.draco.nom.data.AppInfo
+import com.draco.nom.utils.extensions.getDefaultDisplay
+import com.draco.nom.helpers.AppLauncher
+import com.draco.nom.utils.extensions.notificationChannelId
+import com.draco.nom.ui.SettingsActivity
 
 class RecyclerAdapter(
-        private var appList: ArrayList<AppInfo>,
-        private val recyclerView: RecyclerView,
-        private val sharedPrefs: SharedPreferences
+    private var appList: ArrayList<AppInfo>,
+    private val recyclerView: RecyclerView,
+    private val sharedPrefs: SharedPreferences
     ): RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

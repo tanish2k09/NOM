@@ -1,4 +1,4 @@
-package com.draco.nom
+package com.draco.nom.utils.extensions
 
 import android.content.Context
 import android.os.Build
